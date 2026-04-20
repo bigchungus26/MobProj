@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Smart Habit Tracker</string>
+    <string name="tagline">Build habits. Crush workouts.</string>
+
+    <!-- Auth -->
+    <string name="hint_username">Username</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_confirm_password">Confirm password</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_register">Create account</string>
+    <string name="link_register">Don\'t have an account? Register</string>
+    <string name="title_create_account">Create account</string>
+    <string name="subtitle_create_account">Start tracking habits and workouts today.</string>
+    <string name="error_fill_all_fields">Please fill in all fields</string>
+    <string name="error_invalid_credentials">Invalid username or password</string>
+    <string name="error_username_taken">Username already taken</string>
+    <string name="error_username_short">Username must be at least 3 characters</string>
+    <string name="error_password_short">Password must be at least 6 characters</string>
+    <string name="error_password_mismatch">Passwords do not match</string>
+    <string name="msg_account_created">Welcome! Your account is ready.</string>
+
+    <!-- Dashboard -->
+    <string name="greeting_format">Hi, %1$s</string>
+    <string name="dashboard_subtitle">Here\'s how your day is going.</string>
+    <string name="label_today">Today</string>
+    <string name="daily_goal_format">%1$d of %2$d completed today</string>
+    <string name="subtitle_progress">View your history and streaks</string>
+    <string name="subtitle_categories">Organize habits and workouts</string>
+
+    <!-- Navigation -->
+    <string name="title_habits">Habits</string>
+    <string name="title_workouts">Workouts</string>
+    <string name="title_progress">Progress</string>
+    <string name="title_categories">Categories</string>
+    <string name="title_settings">Settings</string>
+    <string name="title_new_habit">New habit</string>
+    <string name="title_edit_habit">Edit habit</string>
+    <string name="title_new_workout">New workout</string>
+    <string name="title_edit_workout">Edit workout</string>
+    <string name="title_new_category">New category</string>
+    <string name="title_edit_category">Edit category</string>
+
+    <!-- Actions -->
+    <string name="action_add_habit">Add habit</string>
+    <string name="action_add_workout">Add workout</string>
+    <string name="action_add_category">Add category</string>
+    <string name="action_save">Save</string>
+    <string name="action_save_settings">Save settings</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_logout">Log out</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_pick_time">Pick time</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="none">None</string>
+
+    <!-- Inputs -->
+    <string name="hint_habit_name">Habit name</string>
+    <string name="hint_workout_name">Workout name</string>
+    <string name="hint_category_name">Category name</string>
+    <string name="hint_description">Description (optional)</string>
+    <string name="hint_duration">Duration (minutes)</string>
+    <string name="hint_daily_goal">Daily goal count</string>
+
+    <!-- Labels -->
+    <string name="label_category">Category</string>
+    <string name="label_frequency">Frequency</string>
+    <string name="label_reminder">Reminder</string>
+    <string name="label_intensity">Intensity</string>
+    <string name="label_type">Type</string>
+    <string name="label_color">Color</string>
+    <string name="label_theme">Theme</string>
+    <string name="label_reminders_enabled">Enable reminders</string>
+    <string name="label_daily_goal">Daily goal</string>
+    <string name="signed_in_as">Signed in as %1$s</string>
+
+    <!-- Values -->
+    <string name="freq_daily">Daily</string>
+    <string name="freq_weekly">Weekly</string>
+    <string name="intensity_low">Low</string>
+    <string name="intensity_medium">Medium</string>
+    <string name="intensity_high">High</string>
+    <string name="theme_system">Follow system</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="no_reminder">No reminder set</string>
+    <string name="reminder_at">Reminder at %1$s</string>
+    <string name="status_completed">Completed</string>
+    <string name="status_not_completed">Skipped</string>
+
+    <!-- Empty states -->
+    <string name="empty_habits">No habits yet. Tap + to add your first one.</string>
+    <string name="empty_workouts">No workouts yet. Tap + to create one.</string>
+    <string name="empty_categories">No categories yet. Tap + to create one.</string>
+    <string name="empty_progress">No progress recorded yet. Check off a habit or workout today.</string>
+    <string name="unknown_item">Removed item</string>
+
+    <!-- Messages -->
+    <string name="error_name_required">Name is required</string>
+    <string name="msg_saved">Saved</string>
+    <string name="msg_settings_saved">Settings updated</string>
+    <string name="progress_summary_format">Today: %1$d completed • Goal: %2$d</string>
+
+    <!-- Confirm dialogs -->
+    <string name="confirm_delete">Delete?</string>
+    <string name="confirm_delete_habit">Delete habit "%1$s"?</string>
+    <string name="confirm_delete_workout">Delete workout "%1$s"?</string>
+    <string name="confirm_delete_category">Delete category "%1$s"?</string>
+
+    <!-- Arrays -->
+    <string-array name="category_types">
+        <item>Habit</item>
+        <item>Workout</item>
+    </string-array>
+</resources>

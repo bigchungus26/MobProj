@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import com.mobproj.habittracker.R;
 import com.mobproj.habittracker.data.CategoryDao;
 import com.mobproj.habittracker.data.UserDao;
+import com.mobproj.habittracker.notify.ReminderScheduler;
 
 public class RegisterActivity extends BaseActivity {
 
@@ -64,6 +65,7 @@ public class RegisterActivity extends BaseActivity {
 
         new CategoryDao(this).ensureDefaults(id);
         session.signIn(id, username);
+        ReminderScheduler.rescheduleAllForCurrentUser(this);
         Toast.makeText(this, R.string.msg_account_created, Toast.LENGTH_SHORT).show();
 
         Intent i = new Intent(this, MainActivity.class);

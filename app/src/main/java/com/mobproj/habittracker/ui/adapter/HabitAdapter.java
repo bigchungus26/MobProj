@@ -3,13 +3,13 @@ package com.mobproj.habittracker.ui.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.checkbox.MaterialCheckBox;
 import com.mobproj.habittracker.R;
 import com.mobproj.habittracker.model.Habit;
 
@@ -19,6 +19,7 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.Holder> {
 
     public interface Listener {
         boolean isCompletedToday(Habit habit);
+        int getStreak(Habit habit);
         void onToggle(Habit habit, boolean checked);
         void onEdit(Habit habit);
         void onDelete(Habit habit);
@@ -59,6 +60,14 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.Holder> {
             h.description.setVisibility(View.GONE);
         }
 
+        int streak = listener.getStreak(habit);
+        if (streak > 0) {
+            h.streakChip.setVisibility(View.VISIBLE);
+            h.streakText.setText(h.itemView.getContext().getString(R.string.streak_chip, streak));
+        } else {
+            h.streakChip.setVisibility(View.GONE);
+        }
+
         h.checkBox.setOnCheckedChangeListener(null);
         h.checkBox.setChecked(listener.isCompletedToday(habit));
         h.checkBox.setOnCheckedChangeListener((v, checked) ->
@@ -74,10 +83,12 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.Holder> {
     }
 
     static class Holder extends RecyclerView.ViewHolder {
-        final CheckBox checkBox;
+        final MaterialCheckBox checkBox;
         final TextView name;
         final TextView meta;
         final TextView description;
+        final View streakChip;
+        final TextView streakText;
         final ImageButton deleteBtn;
 
         Holder(@NonNull View itemView) {
@@ -86,6 +97,8 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.Holder> {
             name = itemView.findViewById(R.id.text_name);
             meta = itemView.findViewById(R.id.text_meta);
             description = itemView.findViewById(R.id.text_description);
+            streakChip = itemView.findViewById(R.id.streak_chip);
+            streakText = itemView.findViewById(R.id.text_streak);
             deleteBtn = itemView.findViewById(R.id.btn_delete);
         }
     }

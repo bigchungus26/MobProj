@@ -51,6 +51,19 @@ public class UserDao {
         }
     }
 
+    public boolean changePassword(long userId, String currentPassword, String newPassword) {
+        User user = findById(userId);
+        if (user == null) return false;
+        if (!PasswordUtils.hash(currentPassword).equals(user.getPassword())) return false;
+        SQLiteDatabase db = helper.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(DatabaseHelper.COL_USER_PASSWORD, PasswordUtils.hash(newPassword));
+        int rows = db.update(DatabaseHelper.TABLE_USERS, cv,
+                DatabaseHelper.COL_USER_ID + "=?",
+                new String[]{String.valueOf(userId)});
+        return rows > 0;
+    }
+
     public User findById(long id) {
         SQLiteDatabase db = helper.getReadableDatabase();
         Cursor c = db.query(DatabaseHelper.TABLE_USERS, null,

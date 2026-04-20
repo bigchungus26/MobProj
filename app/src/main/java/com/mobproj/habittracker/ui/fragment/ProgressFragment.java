@@ -16,6 +16,7 @@ import com.mobproj.habittracker.R;
 import com.mobproj.habittracker.data.ProgressDao;
 import com.mobproj.habittracker.model.ProgressRecord;
 import com.mobproj.habittracker.ui.adapter.ProgressAdapter;
+import com.mobproj.habittracker.ui.widget.WeeklyChartView;
 import com.mobproj.habittracker.util.DateUtils;
 import com.mobproj.habittracker.util.SessionManager;
 
@@ -26,6 +27,7 @@ public class ProgressFragment extends Fragment {
     private RecyclerView recycler;
     private View emptyState;
     private TextView summaryText;
+    private WeeklyChartView chart;
     private SessionManager session;
 
     @Nullable
@@ -42,6 +44,7 @@ public class ProgressFragment extends Fragment {
         recycler = view.findViewById(R.id.recycler_progress);
         emptyState = view.findViewById(R.id.empty_state);
         summaryText = view.findViewById(R.id.text_summary);
+        chart = view.findViewById(R.id.weekly_chart);
 
         recycler.setLayoutManager(new LinearLayoutManager(requireContext()));
     }
@@ -59,6 +62,8 @@ public class ProgressFragment extends Fragment {
         int todayCount = dao.countCompletedOn(userId, DateUtils.todayIso());
         summaryText.setText(getString(R.string.progress_summary_format,
                 todayCount, session.getDailyGoal()));
+
+        chart.setData(dao.countCompletedForLastDays(userId, 7));
 
         if (records.isEmpty()) {
             recycler.setVisibility(View.GONE);

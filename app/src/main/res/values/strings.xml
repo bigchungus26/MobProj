@@ -36,6 +36,23 @@
     <string name="today_empty">Nothing scheduled for today. Add a habit or workout to get started.</string>
     <string name="nothing_due_today">All caught up — nothing due.</string>
     <string name="streak_format">%1$d day streak</string>
+    <string name="streak_chip">%1$d</string>
+
+    <string name="action_change_password">Change password</string>
+    <string name="hint_current_password">Current password</string>
+    <string name="hint_new_password">New password</string>
+    <string name="hint_confirm_new_password">Confirm new password</string>
+    <string name="error_current_password_wrong">Current password is incorrect</string>
+    <string name="msg_password_changed">Password updated</string>
+
+    <string name="weekly_chart_title">Last 7 days</string>
+    <string name="recent_activity_title">Recent activity</string>
+
+    <!-- Notifications -->
+    <string name="notif_channel_reminders">Habit reminders</string>
+    <string name="notif_channel_reminders_desc">Daily reminders for your habits</string>
+    <string name="notif_reminder_title">Time for your habit</string>
+    <string name="notif_reminder_body">Don\'t forget: %1$s</string>
     <string name="title_habits">Habits</string>
     <string name="title_workouts">Workouts</string>
     <string name="title_progress">Progress</string>

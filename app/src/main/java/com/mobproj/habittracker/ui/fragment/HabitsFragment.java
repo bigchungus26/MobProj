@@ -21,6 +21,7 @@ import com.mobproj.habittracker.data.HabitDao;
 import com.mobproj.habittracker.data.ProgressDao;
 import com.mobproj.habittracker.model.Habit;
 import com.mobproj.habittracker.model.ProgressRecord;
+import com.mobproj.habittracker.notify.ReminderScheduler;
 import com.mobproj.habittracker.ui.AddEditHabitActivity;
 import com.mobproj.habittracker.ui.adapter.HabitAdapter;
 import com.mobproj.habittracker.util.DateUtils;
@@ -88,9 +89,16 @@ public class HabitsFragment extends Fragment {
             }
 
             @Override
+            public int getStreak(Habit habit) {
+                return progressDao.currentStreak(userId, habit.getId(),
+                        ProgressRecord.TYPE_HABIT, today);
+            }
+
+            @Override
             public void onToggle(Habit habit, boolean checked) {
                 progressDao.upsertCompletion(userId, habit.getId(),
                         ProgressRecord.TYPE_HABIT, today, checked, null);
+                load();
             }
 
             @Override
@@ -107,6 +115,7 @@ public class HabitsFragment extends Fragment {
                         .setMessage(getString(R.string.confirm_delete_habit, habit.getName()))
                         .setPositiveButton(R.string.delete, (d, w) -> {
                             new HabitDao(requireContext()).delete(habit.getId());
+                            ReminderScheduler.cancelForHabit(requireContext(), habit.getId());
                             load();
                         })
                         .setNegativeButton(R.string.cancel, null)

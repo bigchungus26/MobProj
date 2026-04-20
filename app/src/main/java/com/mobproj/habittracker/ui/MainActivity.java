@@ -1,9 +1,16 @@
 package com.mobproj.habittracker.ui;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.core.content.ContextCompat;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.mobproj.habittracker.R;
+import com.mobproj.habittracker.notify.ReminderScheduler;
 import com.mobproj.habittracker.ui.fragment.HabitsFragment;
 import com.mobproj.habittracker.ui.fragment.HomeFragment;
 import com.mobproj.habittracker.ui.fragment.ProgressFragment;
@@ -23,6 +31,10 @@ public class MainActivity extends BaseActivity {
 
     private BottomNavigationView bottomNav;
     private int currentNavId = R.id.nav_home;
+
+    private final ActivityResultLauncher<String> notificationPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(),
+                    granted -> { /* silently continue either way */ });
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,6 +62,16 @@ public class MainActivity extends BaseActivity {
             }
             return true;
         });
+
+        ensureNotificationPermission();
+    }
+
+    private void ensureNotificationPermission() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return;
+        if (!session.areRemindersEnabled()) return;
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                == PackageManager.PERMISSION_GRANTED) return;
+        notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
     }
 
     private void showFragment(int navId) {
@@ -100,6 +122,7 @@ public class MainActivity extends BaseActivity {
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
         } else if (id == R.id.action_logout) {
+            ReminderScheduler.cancelAllForUser(this, session.getUserId());
             session.signOut();
             Intent i = new Intent(this, LoginActivity.class);
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);

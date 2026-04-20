@@ -20,6 +20,7 @@ import com.mobproj.habittracker.data.CategoryDao;
 import com.mobproj.habittracker.data.HabitDao;
 import com.mobproj.habittracker.model.Category;
 import com.mobproj.habittracker.model.Habit;
+import com.mobproj.habittracker.notify.ReminderScheduler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -154,8 +155,11 @@ public class AddEditHabitActivity extends BaseActivity {
         if (existingHabit != null) {
             dao.update(habit);
         } else {
-            dao.insert(habit);
+            long newId = dao.insert(habit);
+            habit.setId(newId);
         }
+        ReminderScheduler.cancelForHabit(this, habit.getId());
+        ReminderScheduler.scheduleForHabit(this, habit);
         Toast.makeText(this, R.string.msg_saved, Toast.LENGTH_SHORT).show();
         finish();
     }

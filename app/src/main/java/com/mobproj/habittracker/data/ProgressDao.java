@@ -103,6 +103,30 @@ public class ProgressDao {
         return list;
     }
 
+    public int[] countCompletedForLastDays(long userId, int days) {
+        int[] counts = new int[days];
+        SQLiteDatabase db = helper.getReadableDatabase();
+        java.text.SimpleDateFormat fmt = new java.text.SimpleDateFormat(
+                "yyyy-MM-dd", java.util.Locale.US);
+        java.util.Calendar cal = java.util.Calendar.getInstance();
+        cal.add(java.util.Calendar.DAY_OF_YEAR, -(days - 1));
+        for (int i = 0; i < days; i++) {
+            String date = fmt.format(cal.getTime());
+            Cursor c = db.rawQuery("SELECT COUNT(*) FROM " + DatabaseHelper.TABLE_PROGRESS +
+                    " WHERE " + DatabaseHelper.COL_PROG_USER_ID + "=? AND " +
+                    DatabaseHelper.COL_PROG_DATE + "=? AND " +
+                    DatabaseHelper.COL_PROG_COMPLETED + "=1",
+                    new String[]{String.valueOf(userId), date});
+            try {
+                counts[i] = c.moveToFirst() ? c.getInt(0) : 0;
+            } finally {
+                c.close();
+            }
+            cal.add(java.util.Calendar.DAY_OF_YEAR, 1);
+        }
+        return counts;
+    }
+
     public int countCompletedOn(long userId, String date) {
         SQLiteDatabase db = helper.getReadableDatabase();
         Cursor c = db.rawQuery("SELECT COUNT(*) FROM " + DatabaseHelper.TABLE_PROGRESS +

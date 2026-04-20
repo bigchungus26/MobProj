@@ -15,6 +15,7 @@ import com.mobproj.habittracker.R;
 import com.mobproj.habittracker.data.CategoryDao;
 import com.mobproj.habittracker.data.UserDao;
 import com.mobproj.habittracker.model.User;
+import com.mobproj.habittracker.notify.ReminderScheduler;
 
 public class LoginActivity extends BaseActivity {
 
@@ -54,6 +55,7 @@ public class LoginActivity extends BaseActivity {
 
         session.signIn(user.getId(), user.getUsername());
         new CategoryDao(this).ensureDefaults(user.getId());
+        ReminderScheduler.rescheduleAllForCurrentUser(this);
 
         Intent i = new Intent(this, MainActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);

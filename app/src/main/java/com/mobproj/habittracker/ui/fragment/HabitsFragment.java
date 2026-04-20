@@ -1,13 +1,17 @@
-package com.mobproj.habittracker.ui;
+package com.mobproj.habittracker.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,50 +21,56 @@ import com.mobproj.habittracker.data.HabitDao;
 import com.mobproj.habittracker.data.ProgressDao;
 import com.mobproj.habittracker.model.Habit;
 import com.mobproj.habittracker.model.ProgressRecord;
+import com.mobproj.habittracker.ui.AddEditHabitActivity;
 import com.mobproj.habittracker.ui.adapter.HabitAdapter;
 import com.mobproj.habittracker.util.DateUtils;
+import com.mobproj.habittracker.util.SessionManager;
 
 import java.util.List;
 
-public class HabitsActivity extends BaseActivity {
+public class HabitsFragment extends Fragment {
 
     private RecyclerView recycler;
-    private TextView emptyState;
-    private HabitAdapter adapter;
+    private View emptyState;
+    private SessionManager session;
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_list, container, false);
+    }
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_habits);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        session = new SessionManager(requireContext());
+        recycler = view.findViewById(R.id.recycler);
+        emptyState = view.findViewById(R.id.empty_state);
+        TextView emptyText = view.findViewById(R.id.text_empty);
+        ImageView emptyIcon = view.findViewById(R.id.empty_icon);
+        emptyText.setText(R.string.empty_habits);
+        emptyIcon.setImageResource(R.drawable.ic_empty_habits);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(R.string.title_habits);
-        }
+        recycler.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        recycler = findViewById(R.id.recycler_habits);
-        emptyState = findViewById(R.id.text_empty);
-        FloatingActionButton fab = findViewById(R.id.fab_add);
-
-        recycler.setLayoutManager(new LinearLayoutManager(this));
-
+        FloatingActionButton fab = view.findViewById(R.id.fab_add);
+        fab.setContentDescription(getString(R.string.action_add_habit));
         fab.setOnClickListener(v ->
-                startActivity(new Intent(this, AddEditHabitActivity.class)));
+                startActivity(new Intent(requireContext(), AddEditHabitActivity.class)));
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
-        loadHabits();
+        load();
     }
 
-    private void loadHabits() {
+    private void load() {
         long userId = session.getUserId();
         String today = DateUtils.todayIso();
-        ProgressDao progressDao = new ProgressDao(this);
-        List<Habit> habits = new HabitDao(this).findForUser(userId);
+        ProgressDao progressDao = new ProgressDao(requireContext());
+        List<Habit> habits = new HabitDao(requireContext()).findForUser(userId);
 
         if (habits.isEmpty()) {
             recycler.setVisibility(View.GONE);
@@ -70,7 +80,7 @@ public class HabitsActivity extends BaseActivity {
         recycler.setVisibility(View.VISIBLE);
         emptyState.setVisibility(View.GONE);
 
-        adapter = new HabitAdapter(habits, new HabitAdapter.Listener() {
+        recycler.setAdapter(new HabitAdapter(habits, new HabitAdapter.Listener() {
             @Override
             public boolean isCompletedToday(Habit habit) {
                 return progressDao.isCompletedOn(userId, habit.getId(),
@@ -85,30 +95,23 @@ public class HabitsActivity extends BaseActivity {
 
             @Override
             public void onEdit(Habit habit) {
-                Intent i = new Intent(HabitsActivity.this, AddEditHabitActivity.class);
+                Intent i = new Intent(requireContext(), AddEditHabitActivity.class);
                 i.putExtra(AddEditHabitActivity.EXTRA_HABIT_ID, habit.getId());
                 startActivity(i);
             }
 
             @Override
             public void onDelete(Habit habit) {
-                new AlertDialog.Builder(HabitsActivity.this)
+                new AlertDialog.Builder(requireContext())
                         .setTitle(R.string.confirm_delete)
                         .setMessage(getString(R.string.confirm_delete_habit, habit.getName()))
                         .setPositiveButton(R.string.delete, (d, w) -> {
-                            new HabitDao(HabitsActivity.this).delete(habit.getId());
-                            loadHabits();
+                            new HabitDao(requireContext()).delete(habit.getId());
+                            load();
                         })
                         .setNegativeButton(R.string.cancel, null)
                         .show();
             }
-        });
-        recycler.setAdapter(adapter);
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        finish();
-        return true;
+        }));
     }
 }

@@ -7,15 +7,14 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mobproj.habittracker.R;
 import com.mobproj.habittracker.data.CategoryDao;
@@ -32,7 +31,7 @@ public class CategoriesActivity extends BaseActivity {
     };
 
     private RecyclerView recycler;
-    private TextView emptyState;
+    private View emptyState;
     private CategoryAdapter adapter;
 
     @Override
@@ -40,15 +39,11 @@ public class CategoriesActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_categories);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(R.string.title_categories);
-        }
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setNavigationOnClickListener(v -> finish());
 
         recycler = findViewById(R.id.recycler_categories);
-        emptyState = findViewById(R.id.text_empty);
+        emptyState = findViewById(R.id.empty_state);
         FloatingActionButton fab = findViewById(R.id.fab_add);
 
         recycler.setLayoutManager(new LinearLayoutManager(this));
@@ -145,9 +140,4 @@ public class CategoriesActivity extends BaseActivity {
                 .show();
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        finish();
-        return true;
-    }
 }

@@ -1,11 +1,14 @@
-package com.mobproj.habittracker.ui;
+package com.mobproj.habittracker.ui.fragment;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,43 +17,44 @@ import com.mobproj.habittracker.data.ProgressDao;
 import com.mobproj.habittracker.model.ProgressRecord;
 import com.mobproj.habittracker.ui.adapter.ProgressAdapter;
 import com.mobproj.habittracker.util.DateUtils;
+import com.mobproj.habittracker.util.SessionManager;
 
 import java.util.List;
 
-public class ProgressActivity extends BaseActivity {
+public class ProgressFragment extends Fragment {
 
     private RecyclerView recycler;
-    private TextView emptyState;
+    private View emptyState;
     private TextView summaryText;
+    private SessionManager session;
 
+    @Nullable
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_progress);
-
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(R.string.title_progress);
-        }
-
-        recycler = findViewById(R.id.recycler_progress);
-        emptyState = findViewById(R.id.text_empty);
-        summaryText = findViewById(R.id.text_summary);
-
-        recycler.setLayoutManager(new LinearLayoutManager(this));
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_progress, container, false);
     }
 
     @Override
-    protected void onResume() {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        session = new SessionManager(requireContext());
+        recycler = view.findViewById(R.id.recycler_progress);
+        emptyState = view.findViewById(R.id.empty_state);
+        summaryText = view.findViewById(R.id.text_summary);
+
+        recycler.setLayoutManager(new LinearLayoutManager(requireContext()));
+    }
+
+    @Override
+    public void onResume() {
         super.onResume();
-        loadProgress();
+        load();
     }
 
-    private void loadProgress() {
+    private void load() {
         long userId = session.getUserId();
-        ProgressDao dao = new ProgressDao(this);
+        ProgressDao dao = new ProgressDao(requireContext());
         List<ProgressRecord> records = dao.findForUser(userId, 100);
         int todayCount = dao.countCompletedOn(userId, DateUtils.todayIso());
         summaryText.setText(getString(R.string.progress_summary_format,
@@ -63,13 +67,6 @@ public class ProgressActivity extends BaseActivity {
         }
         recycler.setVisibility(View.VISIBLE);
         emptyState.setVisibility(View.GONE);
-
         recycler.setAdapter(new ProgressAdapter(records));
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        finish();
-        return true;
     }
 }

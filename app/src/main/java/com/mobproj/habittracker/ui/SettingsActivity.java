@@ -2,23 +2,23 @@ package com.mobproj.habittracker.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.materialswitch.MaterialSwitch;
 import com.mobproj.habittracker.R;
 import com.mobproj.habittracker.util.SessionManager;
 
 public class SettingsActivity extends BaseActivity {
 
     private RadioGroup themeGroup;
-    private Switch remindersSwitch;
+    private MaterialSwitch remindersSwitch;
     private EditText dailyGoalInput;
     private TextView usernameText;
 
@@ -27,19 +27,15 @@ public class SettingsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(R.string.title_settings);
-        }
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setNavigationOnClickListener(v -> finish());
 
         themeGroup = findViewById(R.id.group_theme);
         remindersSwitch = findViewById(R.id.switch_reminders);
         dailyGoalInput = findViewById(R.id.input_daily_goal);
         usernameText = findViewById(R.id.text_username);
-        Button saveBtn = findViewById(R.id.btn_save);
-        Button logoutBtn = findViewById(R.id.btn_logout);
+        MaterialButton saveBtn = findViewById(R.id.btn_save);
+        MaterialButton logoutBtn = findViewById(R.id.btn_logout);
 
         loadCurrentSettings();
 
@@ -93,11 +89,5 @@ public class SettingsActivity extends BaseActivity {
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(i);
         finish();
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        finish();
-        return true;
     }
 }

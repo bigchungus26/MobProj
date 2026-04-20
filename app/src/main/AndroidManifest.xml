@@ -22,11 +22,8 @@
         <activity android:name=".ui.LoginActivity" android:exported="false" />
         <activity android:name=".ui.RegisterActivity" android:exported="false" />
         <activity android:name=".ui.MainActivity" android:exported="false" />
-        <activity android:name=".ui.HabitsActivity" android:exported="false" />
         <activity android:name=".ui.AddEditHabitActivity" android:exported="false" />
-        <activity android:name=".ui.WorkoutsActivity" android:exported="false" />
         <activity android:name=".ui.AddEditWorkoutActivity" android:exported="false" />
-        <activity android:name=".ui.ProgressActivity" android:exported="false" />
         <activity android:name=".ui.CategoriesActivity" android:exported="false" />
         <activity android:name=".ui.SettingsActivity" android:exported="false" />
     </application>

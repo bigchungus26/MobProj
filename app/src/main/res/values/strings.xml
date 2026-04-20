@@ -29,6 +29,13 @@
     <string name="subtitle_categories">Organize habits and workouts</string>
 
     <!-- Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_categories">Categories</string>
+    <string name="today_heading">Today</string>
+    <string name="today_subheading">%1$s</string>
+    <string name="today_empty">Nothing scheduled for today. Add a habit or workout to get started.</string>
+    <string name="nothing_due_today">All caught up — nothing due.</string>
+    <string name="streak_format">%1$d day streak</string>
     <string name="title_habits">Habits</string>
     <string name="title_workouts">Workouts</string>
     <string name="title_progress">Progress</string>

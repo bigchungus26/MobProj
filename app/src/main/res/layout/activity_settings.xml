@@ -5,13 +5,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <androidx.appcompat.widget.Toolbar
+    <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:titleTextColor="@android:color/white" />
+        app:navigationIcon="@drawable/ic_back"
+        app:title="@string/title_settings" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -21,33 +20,39 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="@dimen/screen_padding">
 
-            <TextView
-                android:id="@+id/text_username"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <View
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:background="?android:attr/listDivider" />
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/card_padding">
+
+                    <TextView
+                        android:id="@+id/text_username"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TextAppearance.App.Title" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_lg"
                 android:text="@string/label_theme"
+                android:textAppearance="@style/TextAppearance.App.Caption"
                 android:textStyle="bold" />
 
             <RadioGroup
                 android:id="@+id/group_theme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp">
+                android:layout_marginTop="@dimen/space_xs">
 
                 <RadioButton
                     android:id="@+id/radio_theme_system"
@@ -72,57 +77,61 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:background="?android:attr/listDivider" />
+                android:layout_marginTop="@dimen/space_md"
+                android:layout_marginBottom="@dimen/space_md"
+                android:background="?attr/colorOutline" />
 
-            <Switch
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/switch_reminders"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/label_reminders_enabled"
-                android:textStyle="bold" />
+                android:textAppearance="@style/TextAppearance.App.Body" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:background="?android:attr/listDivider" />
+                android:layout_marginTop="@dimen/space_md"
+                android:layout_marginBottom="@dimen/space_md"
+                android:background="?attr/colorOutline" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/label_daily_goal"
+                android:textAppearance="@style/TextAppearance.App.Caption"
                 android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_xs"
                 android:hint="@string/hint_daily_goal">
 
-                <EditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/input_daily_goal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_save"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="@dimen/space_xl"
                 android:text="@string/action_save_settings" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_logout"
-                style="?attr/borderlessButtonStyle"
+                style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="@dimen/space_sm"
                 android:text="@string/action_logout"
-                android:textColor="@color/logoutRed" />
+                android:textColor="@color/status_pending"
+                app:strokeColor="@color/status_pending" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

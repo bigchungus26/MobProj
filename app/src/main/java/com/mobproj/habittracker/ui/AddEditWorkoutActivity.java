@@ -2,18 +2,16 @@ package com.mobproj.habittracker.ui;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.MenuItem;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.mobproj.habittracker.R;
 import com.mobproj.habittracker.data.CategoryDao;
 import com.mobproj.habittracker.data.WorkoutDao;
@@ -31,10 +29,9 @@ public class AddEditWorkoutActivity extends BaseActivity {
     private EditText descriptionInput;
     private EditText durationInput;
     private Spinner categorySpinner;
-    private RadioGroup intensityGroup;
+    private MaterialButtonToggleGroup intensityGroup;
 
     private List<Category> categories;
-    private long workoutId = -1L;
     private Workout existingWorkout;
 
     @Override
@@ -42,29 +39,26 @@ public class AddEditWorkoutActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_edit_workout);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setNavigationOnClickListener(v -> finish());
 
         nameInput = findViewById(R.id.input_name);
         descriptionInput = findViewById(R.id.input_description);
         durationInput = findViewById(R.id.input_duration);
         categorySpinner = findViewById(R.id.spinner_category);
         intensityGroup = findViewById(R.id.group_intensity);
-        Button saveBtn = findViewById(R.id.btn_save);
+        MaterialButton saveBtn = findViewById(R.id.btn_save);
 
-        workoutId = getIntent().getLongExtra(EXTRA_WORKOUT_ID, -1L);
+        long workoutId = getIntent().getLongExtra(EXTRA_WORKOUT_ID, -1L);
         loadCategories();
 
         if (workoutId != -1L) {
-            setTitle(R.string.title_edit_workout);
+            toolbar.setTitle(R.string.title_edit_workout);
             existingWorkout = new WorkoutDao(this).findById(workoutId);
             populateExisting();
         } else {
-            setTitle(R.string.title_new_workout);
-            intensityGroup.check(R.id.radio_medium);
+            toolbar.setTitle(R.string.title_new_workout);
+            intensityGroup.check(R.id.btn_medium);
         }
 
         saveBtn.setOnClickListener(v -> save());
@@ -91,11 +85,11 @@ public class AddEditWorkoutActivity extends BaseActivity {
         durationInput.setText(String.valueOf(existingWorkout.getDurationMinutes()));
         String intensity = existingWorkout.getIntensity();
         if (Workout.INTENSITY_LOW.equals(intensity)) {
-            intensityGroup.check(R.id.radio_low);
+            intensityGroup.check(R.id.btn_low);
         } else if (Workout.INTENSITY_HIGH.equals(intensity)) {
-            intensityGroup.check(R.id.radio_high);
+            intensityGroup.check(R.id.btn_high);
         } else {
-            intensityGroup.check(R.id.radio_medium);
+            intensityGroup.check(R.id.btn_medium);
         }
         if (existingWorkout.getCategoryId() != null) {
             for (int i = 0; i < categories.size(); i++) {
@@ -131,9 +125,9 @@ public class AddEditWorkoutActivity extends BaseActivity {
         workout.setCategoryId(selected != null && selected.getId() > 0
                 ? selected.getId() : null);
 
-        int intensityId = intensityGroup.getCheckedRadioButtonId();
-        if (intensityId == R.id.radio_low) workout.setIntensity(Workout.INTENSITY_LOW);
-        else if (intensityId == R.id.radio_high) workout.setIntensity(Workout.INTENSITY_HIGH);
+        int intensityId = intensityGroup.getCheckedButtonId();
+        if (intensityId == R.id.btn_low) workout.setIntensity(Workout.INTENSITY_LOW);
+        else if (intensityId == R.id.btn_high) workout.setIntensity(Workout.INTENSITY_HIGH);
         else workout.setIntensity(Workout.INTENSITY_MEDIUM);
 
         WorkoutDao dao = new WorkoutDao(this);
@@ -144,14 +138,5 @@ public class AddEditWorkoutActivity extends BaseActivity {
         }
         Toast.makeText(this, R.string.msg_saved, Toast.LENGTH_SHORT).show();
         finish();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 }

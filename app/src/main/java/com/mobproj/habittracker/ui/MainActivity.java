@@ -4,25 +4,25 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
 
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.mobproj.habittracker.R;
-import com.mobproj.habittracker.data.HabitDao;
-import com.mobproj.habittracker.data.ProgressDao;
-import com.mobproj.habittracker.data.WorkoutDao;
-import com.mobproj.habittracker.util.DateUtils;
+import com.mobproj.habittracker.ui.fragment.HabitsFragment;
+import com.mobproj.habittracker.ui.fragment.HomeFragment;
+import com.mobproj.habittracker.ui.fragment.ProgressFragment;
+import com.mobproj.habittracker.ui.fragment.WorkoutsFragment;
 
 public class MainActivity extends BaseActivity {
 
-    private TextView greetingText;
-    private TextView habitsCountText;
-    private TextView workoutsCountText;
-    private TextView completedTodayText;
-    private TextView dailyGoalText;
+    private static final String STATE_SELECTED_NAV = "selected_nav";
+
+    private BottomNavigationView bottomNav;
+    private int currentNavId = R.id.nav_home;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -34,51 +34,54 @@ public class MainActivity extends BaseActivity {
         }
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        greetingText = findViewById(R.id.text_greeting);
-        habitsCountText = findViewById(R.id.text_habits_count);
-        workoutsCountText = findViewById(R.id.text_workouts_count);
-        completedTodayText = findViewById(R.id.text_completed_today);
-        dailyGoalText = findViewById(R.id.text_daily_goal);
+        bottomNav = findViewById(R.id.bottom_nav);
+        if (savedInstanceState != null) {
+            currentNavId = savedInstanceState.getInt(STATE_SELECTED_NAV, R.id.nav_home);
+        } else {
+            showFragment(currentNavId);
+        }
+        bottomNav.setSelectedItemId(currentNavId);
+        bottomNav.setOnItemSelectedListener(item -> {
+            if (item.getItemId() != currentNavId) {
+                showFragment(item.getItemId());
+            }
+            return true;
+        });
+    }
 
-        CardView habitsCard = findViewById(R.id.card_habits);
-        CardView workoutsCard = findViewById(R.id.card_workouts);
-        CardView progressCard = findViewById(R.id.card_progress);
-        CardView categoriesCard = findViewById(R.id.card_categories);
-
-        habitsCard.setOnClickListener(v ->
-                startActivity(new Intent(this, HabitsActivity.class)));
-        workoutsCard.setOnClickListener(v ->
-                startActivity(new Intent(this, WorkoutsActivity.class)));
-        progressCard.setOnClickListener(v ->
-                startActivity(new Intent(this, ProgressActivity.class)));
-        categoriesCard.setOnClickListener(v ->
-                startActivity(new Intent(this, CategoriesActivity.class)));
+    private void showFragment(int navId) {
+        currentNavId = navId;
+        Fragment fragment;
+        int titleRes;
+        if (navId == R.id.nav_habits) {
+            fragment = new HabitsFragment();
+            titleRes = R.string.title_habits;
+        } else if (navId == R.id.nav_workouts) {
+            fragment = new WorkoutsFragment();
+            titleRes = R.string.title_workouts;
+        } else if (navId == R.id.nav_progress) {
+            fragment = new ProgressFragment();
+            titleRes = R.string.title_progress;
+        } else {
+            fragment = new HomeFragment();
+            titleRes = R.string.app_name;
+        }
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(titleRes);
+        }
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .commit();
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        refreshStats();
-    }
-
-    private void refreshStats() {
-        long userId = session.getUserId();
-        greetingText.setText(getString(R.string.greeting_format, session.getUsername()));
-
-        int habits = new HabitDao(this).countForUser(userId);
-        int workouts = new WorkoutDao(this).countForUser(userId);
-        int completedToday = new ProgressDao(this)
-                .countCompletedOn(userId, DateUtils.todayIso());
-        int dailyGoal = session.getDailyGoal();
-
-        habitsCountText.setText(String.valueOf(habits));
-        workoutsCountText.setText(String.valueOf(workouts));
-        completedTodayText.setText(String.valueOf(completedToday));
-        dailyGoalText.setText(getString(R.string.daily_goal_format,
-                completedToday, dailyGoal));
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(STATE_SELECTED_NAV, currentNavId);
     }
 
     @Override
@@ -88,9 +91,12 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(@androidx.annotation.NonNull MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_categories) {
+            startActivity(new Intent(this, CategoriesActivity.class));
+            return true;
+        } else if (id == R.id.action_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
         } else if (id == R.id.action_logout) {

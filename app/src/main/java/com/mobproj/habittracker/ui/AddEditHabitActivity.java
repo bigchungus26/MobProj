@@ -3,19 +3,18 @@ package com.mobproj.habittracker.ui;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.MenuItem;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.button.MaterialButtonToggleGroup;
 
+import androidx.annotation.Nullable;
+
+import com.google.android.material.appbar.MaterialToolbar;
 import com.mobproj.habittracker.R;
 import com.mobproj.habittracker.data.CategoryDao;
 import com.mobproj.habittracker.data.HabitDao;
@@ -33,10 +32,8 @@ public class AddEditHabitActivity extends BaseActivity {
     private EditText nameInput;
     private EditText descriptionInput;
     private Spinner categorySpinner;
-    private RadioGroup frequencyGroup;
+    private MaterialButtonToggleGroup frequencyGroup;
     private TextView reminderText;
-    private Button reminderBtn;
-    private Button saveBtn;
 
     private List<Category> categories;
     private long habitId = -1L;
@@ -48,31 +45,29 @@ public class AddEditHabitActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_edit_habit);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
 
         nameInput = findViewById(R.id.input_name);
         descriptionInput = findViewById(R.id.input_description);
         categorySpinner = findViewById(R.id.spinner_category);
         frequencyGroup = findViewById(R.id.group_frequency);
         reminderText = findViewById(R.id.text_reminder);
-        reminderBtn = findViewById(R.id.btn_pick_time);
-        saveBtn = findViewById(R.id.btn_save);
+        MaterialButton reminderBtn = findViewById(R.id.btn_pick_time);
+        MaterialButton saveBtn = findViewById(R.id.btn_save);
 
         habitId = getIntent().getLongExtra(EXTRA_HABIT_ID, -1L);
         loadCategories();
 
         if (habitId != -1L) {
-            setTitle(R.string.title_edit_habit);
+            toolbar.setTitle(R.string.title_edit_habit);
             existingHabit = new HabitDao(this).findById(habitId);
             populateExisting();
         } else {
-            setTitle(R.string.title_new_habit);
+            toolbar.setTitle(R.string.title_new_habit);
+            frequencyGroup.check(R.id.btn_daily);
         }
 
+        toolbar.setNavigationOnClickListener(v -> finish());
         reminderBtn.setOnClickListener(v -> pickTime());
         saveBtn.setOnClickListener(v -> save());
     }
@@ -100,9 +95,9 @@ public class AddEditHabitActivity extends BaseActivity {
         nameInput.setText(existingHabit.getName());
         descriptionInput.setText(existingHabit.getDescription());
         if (Habit.FREQ_WEEKLY.equals(existingHabit.getFrequency())) {
-            frequencyGroup.check(R.id.radio_weekly);
+            frequencyGroup.check(R.id.btn_weekly);
         } else {
-            frequencyGroup.check(R.id.radio_daily);
+            frequencyGroup.check(R.id.btn_daily);
         }
         if (existingHabit.getCategoryId() != null) {
             for (int i = 0; i < categories.size(); i++) {
@@ -151,7 +146,7 @@ public class AddEditHabitActivity extends BaseActivity {
         Category selected = (Category) categorySpinner.getSelectedItem();
         habit.setCategoryId(selected != null && selected.getId() > 0
                 ? selected.getId() : null);
-        habit.setFrequency(frequencyGroup.getCheckedRadioButtonId() == R.id.radio_weekly
+        habit.setFrequency(frequencyGroup.getCheckedButtonId() == R.id.btn_weekly
                 ? Habit.FREQ_WEEKLY : Habit.FREQ_DAILY);
         habit.setReminderTime(reminderTime);
 
@@ -163,14 +158,5 @@ public class AddEditHabitActivity extends BaseActivity {
         }
         Toast.makeText(this, R.string.msg_saved, Toast.LENGTH_SHORT).show();
         finish();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 }

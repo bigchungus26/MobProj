@@ -3,11 +3,11 @@ package com.mobproj.habittracker.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.button.MaterialButton;
 
 import androidx.annotation.Nullable;
 
@@ -28,7 +28,7 @@ public class LoginActivity extends BaseActivity {
 
         usernameInput = findViewById(R.id.input_username);
         passwordInput = findViewById(R.id.input_password);
-        Button signInBtn = findViewById(R.id.btn_sign_in);
+        MaterialButton signInBtn = findViewById(R.id.btn_sign_in);
         TextView registerLink = findViewById(R.id.link_register);
 
         signInBtn.setOnClickListener(v -> attemptSignIn());

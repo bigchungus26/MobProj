@@ -1,4 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="summaryBackground">#263238</color>
+    <color name="brand_primary">#B9C5FF</color>
+    <color name="brand_on_primary">#0A1E5C</color>
+    <color name="brand_primary_container">#2B3EA3</color>
+    <color name="brand_on_primary_container">#DFE4FF</color>
+
+    <color name="brand_secondary">#4EE0B8</color>
+    <color name="brand_on_secondary">#003828</color>
+
+    <color name="surface">#1A1B23</color>
+    <color name="surface_variant">#22242E</color>
+    <color name="on_surface">#E6E7EC</color>
+    <color name="on_surface_variant">#A7AAB3</color>
+    <color name="outline">#3C3E49</color>
+    <color name="background">#121319</color>
+
+    <color name="status_completed">#4AD991</color>
+    <color name="status_pending">#FF7E86</color>
+
+    <color name="colorPrimaryDark">#1E2B7A</color>
+    <color name="summaryBackground">@color/brand_primary_container</color>
 </resources>

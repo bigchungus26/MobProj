@@ -5,13 +5,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <androidx.appcompat.widget.Toolbar
+    <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:titleTextColor="@android:color/white" />
+        app:navigationIcon="@drawable/ic_back" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -21,14 +19,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="@dimen/screen_padding">
 
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_habit_name">
 
-                <EditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/input_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -36,12 +35,13 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="@dimen/space_md"
                 android:hint="@string/hint_description">
 
-                <EditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/input_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -52,49 +52,54 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="@dimen/space_lg"
                 android:text="@string/label_category"
+                android:textAppearance="@style/TextAppearance.App.Caption"
                 android:textStyle="bold" />
 
             <Spinner
                 android:id="@+id/spinner_category"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp" />
+                android:layout_marginTop="@dimen/space_xs" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="@dimen/space_lg"
                 android:text="@string/label_frequency"
+                android:textAppearance="@style/TextAppearance.App.Caption"
                 android:textStyle="bold" />
 
-            <RadioGroup
+            <com.google.android.material.button.MaterialButtonToggleGroup
                 android:id="@+id/group_frequency"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_marginTop="@dimen/space_xs"
+                app:singleSelection="true"
+                app:selectionRequired="true">
 
-                <RadioButton
-                    android:id="@+id/radio_daily"
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_daily"
+                    style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:checked="true"
                     android:text="@string/freq_daily" />
 
-                <RadioButton
-                    android:id="@+id/radio_weekly"
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_weekly"
+                    style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
                     android:text="@string/freq_weekly" />
-            </RadioGroup>
+            </com.google.android.material.button.MaterialButtonToggleGroup>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="@dimen/space_lg"
                 android:text="@string/label_reminder"
+                android:textAppearance="@style/TextAppearance.App.Caption"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -108,21 +113,22 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/no_reminder" />
+                    android:text="@string/no_reminder"
+                    android:textAppearance="@style/TextAppearance.App.Body" />
 
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_pick_time"
-                    style="?attr/borderlessButtonStyle"
+                    style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/action_pick_time" />
             </LinearLayout>
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_save"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="@dimen/space_xl"
                 android:text="@string/action_save" />
         </LinearLayout>
     </ScrollView>

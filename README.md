@@ -12,7 +12,7 @@ workouts with categories, progress history, and customizable settings.
 
 ## Core features
 
-- Local user accounts with SHA-256 password hashing
+- Local user accounts with salted PBKDF2 password hashing
 - Habits (daily/weekly) with reminders and categories
 - Workouts with duration, intensity and categories
 - Daily completion tracking + progress history (last 100 records)

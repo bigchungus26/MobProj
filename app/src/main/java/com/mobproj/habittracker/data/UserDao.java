@@ -31,8 +31,7 @@ public class UserDao {
     public User authenticate(String username, String plainPassword) {
         User user = findByUsername(username);
         if (user == null) return null;
-        String hashed = PasswordUtils.hash(plainPassword);
-        if (hashed.equals(user.getPassword())) {
+        if (PasswordUtils.verify(plainPassword, user.getPassword())) {
             return user;
         }
         return null;
@@ -54,7 +53,7 @@ public class UserDao {
     public boolean changePassword(long userId, String currentPassword, String newPassword) {
         User user = findById(userId);
         if (user == null) return false;
-        if (!PasswordUtils.hash(currentPassword).equals(user.getPassword())) return false;
+        if (!PasswordUtils.verify(currentPassword, user.getPassword())) return false;
         SQLiteDatabase db = helper.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(DatabaseHelper.COL_USER_PASSWORD, PasswordUtils.hash(newPassword));
